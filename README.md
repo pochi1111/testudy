@@ -1,6 +1,8 @@
 # testudy
 
-A new Flutter project.
+テスト勉強をサポートするためのアプリです。
+
+まだまだ開発中です -ω-
 
 ## Getting Started
 
