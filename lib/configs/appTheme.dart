@@ -18,3 +18,18 @@ final appTheme = ThemeData(
     onSurface: Color(0xFF000000),
   ),
 );
+
+class AppBarTitle extends StatelessWidget {
+  final String title;
+  const AppBarTitle(this.title);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 25,
+      ),
+    );
+  }
+}
