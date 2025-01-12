@@ -36,25 +36,22 @@ class _MainScreenState extends State<MainScreen>{
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         onTap: onTabTapped,
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 0,
-        ),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: 'ホーム',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.access_time_filled),
-            label: 'StudyTime',
+            label: '勉強時間',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: 'Tests',
+            label: 'テスト',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'プロフィール',
           ),
         ],
       ),

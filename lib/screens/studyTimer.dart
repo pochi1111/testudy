@@ -10,6 +10,10 @@ class _StudyTimerState extends State<StudyTimer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Timer'),
+        scrolledUnderElevation: 0,
+      ),
       body: Center(
         child: Text('Timer'),
       ),

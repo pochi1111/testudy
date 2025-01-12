@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 const Color primaryColor = Color(0xFFF3F3F3);
 
 final appTheme = ThemeData(
-  fontFamily: 'MPLUSRounded1c-Regular',
+  fontFamily: 'Noto Sans JP',
   colorScheme: const ColorScheme(
     brightness: Brightness.light,
     primary: Color(0xFF000000),
