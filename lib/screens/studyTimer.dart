@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 class StudyTimer extends StatefulWidget {
-  const StudyTimer({Key? key}) : super(key: key);
+  const StudyTimer({super.key});
 
   @override
   _StudyTimerState createState() => _StudyTimerState();

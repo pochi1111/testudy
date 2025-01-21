@@ -44,8 +44,8 @@ class StudyTimeAPI{
         'description': record.description,
       });
     }catch(e){
-      print(e);
-      print("!!error!!");
+      print('データベースエラーが発生しました: $e');
+      throw Exception('勉強時間の追加に失敗しました');
     }
   }
 

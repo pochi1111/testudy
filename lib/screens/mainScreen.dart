@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testudy/screens/studyTime.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   _MainScreenState createState() => _MainScreenState();

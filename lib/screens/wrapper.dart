@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'mainScreen.dart';
 
 class Wrapper extends StatefulWidget {
-  const Wrapper({Key? key}) : super(key: key);
+  const Wrapper({super.key});
 
   @override
   _WrapperState createState() => _WrapperState();
