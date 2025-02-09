@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testudy/screens/studyTime.dart';
+import 'package:testudy/screens/studyTimeAdd.dart';
+import 'package:testudy/screens/studyTimeStats.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,8 +18,8 @@ class _MainScreenState extends State<MainScreen>{
     super.initState();
     _children = [
       PlaceholderWidget(),
-      StudyTime(),
-      PlaceholderWidget(),
+      const StudyTime(),
+      const StudyTimeStats(),
       PlaceholderWidget(),
     ];
   }
@@ -46,12 +48,12 @@ class _MainScreenState extends State<MainScreen>{
             label: '勉強時間',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'テスト',
+            icon: Icon(Icons.query_stats),
+            label: '統計'
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'プロフィール',
+            icon: Icon(Icons.calendar_today),
+            label: 'テスト',
           ),
         ],
       ),

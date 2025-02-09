@@ -519,6 +519,6 @@ class _StudyTimeAddState extends State<StudyTimeAdd> {
       )),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    Navigator.pop(context,true);
+    Navigator.of(context).pop(true);
   }
 }

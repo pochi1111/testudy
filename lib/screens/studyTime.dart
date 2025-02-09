@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testudy/screens/studyTimeAdd.dart';
 import 'package:testudy/services/studyTime.dart';
 import 'package:testudy/screens/studyTimeEdit.dart';
+import 'package:testudy/configs/appTheme.dart';
 
 class StudyTime extends StatefulWidget {
   const StudyTime({super.key});
@@ -21,7 +22,6 @@ class _StudyTimeState extends State<StudyTime> {
 
   Future<void> _loadStudyRecords() async {
     try {
-      print("読み込みます");
       final records = await StudyTimeAPI().getStudyTimeRecords(0);
       setState(() {
         studyRecords = records;
@@ -60,7 +60,8 @@ class _StudyTimeState extends State<StudyTime> {
                     onTap: () async {
                       final result = await Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => StudyTimeEdit(record: record),
+                          builder: (context) =>
+                              StudyTimeEdit(record: record),
                         ),
                       );
                       if (result == true) {
