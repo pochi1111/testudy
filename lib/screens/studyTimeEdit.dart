@@ -465,7 +465,7 @@ class _StudyTimeEditState extends State<StudyTimeEdit> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromARGB(255, 237, 91, 91),
+        backgroundColor: const Color.fromARGB(255, 237, 91, 91),
         onPressed: () => {
           _checkDeleteRecord()
         },

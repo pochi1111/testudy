@@ -4,7 +4,7 @@ import 'package:testudy/services/studyTime.dart';
 import 'package:testudy/screens/elements/weekTimeGraph.dart';
 
 class StudyTimeStats extends StatefulWidget {
-  const StudyTimeStats({Key? key}) : super(key: key);
+  const StudyTimeStats({super.key});
 
   @override
   _StudyTimeStatsState createState() => _StudyTimeStatsState();
@@ -12,6 +12,8 @@ class StudyTimeStats extends StatefulWidget {
 
 class _StudyTimeStatsState extends State<StudyTimeStats> {
   List<int> studyRecordsWeek = [];
+  String totalStudyTime = '';
+  String totalRecordNum = '';
   @override
   void initState() {
     super.initState();
@@ -24,9 +26,10 @@ class _StudyTimeStatsState extends State<StudyTimeStats> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
+        toolbarHeight: 0,
       ),
       body: studyRecordsWeek.isEmpty
-          ? const Center(child: const CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _loadStudyRecords,
               child: SingleChildScrollView(
@@ -36,6 +39,60 @@ class _StudyTimeStatsState extends State<StudyTimeStats> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                width: screenWidth * 0.4,
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      "総勉強時間",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    Text.rich(
+                                      TextSpan(
+                                        text: totalStudyTime,
+                                        style: const TextStyle(fontSize: 30),
+                                        children: const [
+                                          TextSpan(
+                                            text: '時間',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: screenWidth * 0.4,
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      "総レコード数",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    Text.rich(
+                                      TextSpan(
+                                        text: totalRecordNum,
+                                        style: const TextStyle(fontSize: 30),
+                                        children: const [
+                                          TextSpan(
+                                            text: '回',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         Stack(
                           children: [
                             Container(
@@ -43,7 +100,7 @@ class _StudyTimeStatsState extends State<StudyTimeStats> {
                                   left: 20, right: 20, top: 20, bottom: 10),
                               padding: const EdgeInsets.only(
                                   left: 0, right: 20, top: 70, bottom: 10),
-                              height: 340,
+                              height: 360,
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: Colors.grey.shade300,
@@ -80,12 +137,21 @@ class _StudyTimeStatsState extends State<StudyTimeStats> {
       final now = DateTime.now();
       final weekstart = now.subtract(const Duration(days: 7));
       final weekend = now;
+      final totalRecordNum = await StudyTimeAPI().getTotalRecordNum();
       final studyTimeWeek =
           await StudyTimeAPI().getRangeEachStudyTime(weekstart, weekend);
+      final int totalStudyTime = (await StudyTimeAPI().getTotalStudyTime()/60).floor();
       setState(() {
+        this.totalStudyTime = totalStudyTime.toString().replaceAllMapped(
+          RegExp(r'\B(?=(\d{3})+(?!\d))'),
+          (Match match) => ','
+        );
+        this.totalRecordNum = totalRecordNum.toString().replaceAllMapped(
+          RegExp(r'\B(?=(\d{3})+(?!\d))'),
+          (Match match) => ','
+        );
         studyRecordsWeek = studyTimeWeek;
       });
-      print("studyRecordsWeek: $studyRecordsWeek");
     } catch (e) {
       print('Error loading study records: $e');
     }

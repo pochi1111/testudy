@@ -85,6 +85,12 @@ class StudyTimeAPI {
     return totalStudyTime;
   }
 
+  Future<int> getTotalRecordNum() async {
+    await _initDatabase();
+    List<Map<String, dynamic>> records = await _database.query('studyTime');
+    return records.length;
+  }
+
   //TODO 動作未実証
   Future<int> getRangeStudyTime(DateTime start, DateTime end) async {
     await _initDatabase();

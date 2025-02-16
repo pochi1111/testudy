@@ -348,10 +348,21 @@ class _StudyTimeAddState extends State<StudyTimeAdd> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          int studyTimeInMinutes = studyTimeHour * 60 + studyTimeMinute;
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const StudyTimer()),
-          );
+            MaterialPageRoute(
+              builder: (context) =>
+                  StudyTimer(initialMinutes: studyTimeInMinutes),
+            ),
+          ).then((result) {
+            if (result != null) {
+              setState(() {
+                studyTimeHour = result ~/ 60;
+                studyTimeMinute = result % 60;
+              });
+            }
+          });
         },
         child: const Icon(Icons.timer),
       ),

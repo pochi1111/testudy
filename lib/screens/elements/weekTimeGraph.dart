@@ -6,9 +6,9 @@ class WeekTimeGraph extends StatelessWidget {
   final List<int> studyTimesInt;
 
   const WeekTimeGraph({
-    Key? key,
+    super.key,
     required this.studyTimesInt,
-  }) : super(key: key);
+  });
 
   static const double barWidth = 25.0;
   final TextStyle _labelStyle =
