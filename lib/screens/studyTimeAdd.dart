@@ -357,6 +357,17 @@ class _StudyTimeAddState extends State<StudyTimeAdd> {
             ),
           ).then((result) {
             if (result != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("勉強時間を適用しました"),
+                  duration: Duration(milliseconds: 1500),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(5),
+                    ),
+                  ),
+                ),
+              );
               setState(() {
                 studyTimeHour = result ~/ 60;
                 studyTimeMinute = result % 60;

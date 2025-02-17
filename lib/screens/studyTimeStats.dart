@@ -93,37 +93,31 @@ class _StudyTimeStatsState extends State<StudyTimeStats> {
                             ],
                           ),
                         ),
-                        Stack(
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 20, bottom: 10),
-                              padding: const EdgeInsets.only(
-                                  left: 0, right: 20, top: 70, bottom: 10),
-                              height: 360,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey.shade300,
-                                  width: 1.0,
+                        Container(
+                          margin: const EdgeInsets.only(top: 4),
+                          padding: const EdgeInsets.only(
+                              bottom: 10, left: 10, right: 10),
+                          color: appTheme.colorScheme.onPrimary,
+                          child: const Text(
+                            "一週間の勉強時間",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.all(5),
+                            child: studyRecordsWeek.every((time) => time == 0)
+                              ? const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                "一週間勉強記録がありません",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
                                 ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: WeekTimeGraph(
-                                  studyTimesInt: studyRecordsWeek),
-                            ),
-                            Center(
-                              child: Container(
-                                margin: const EdgeInsets.only(top: 4),
-                                padding: const EdgeInsets.only(
-                                    bottom: 10, left: 10, right: 10),
-                                color: appTheme.colorScheme.onPrimary,
-                                child: const Text(
-                                  "一週間の勉強時間",
-                                  style: TextStyle(fontSize: 20),
                                 ),
-                              ),
-                            ),
-                          ],
+                              )
+                              : WeekTimeGraph(
+                                studyTimesInt: studyRecordsWeek),
                         ),
                       ]),
                 ),
