@@ -176,6 +176,7 @@ class WeekTimeGraph extends StatelessWidget {
     return SideTitleWidget(
       meta: meta,
       child: Text(
+        textAlign: TextAlign.right,
         txt,
         style: TextStyle(
           color: appTheme.primaryColor,
