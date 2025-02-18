@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testudy/screens/studyTime.dart';
 import 'package:testudy/screens/studyTimeAdd.dart';
 import 'package:testudy/screens/studyTimeStats.dart';
+import 'package:testudy/screens/examScreen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -20,7 +21,7 @@ class _MainScreenState extends State<MainScreen>{
       PlaceholderWidget(),
       const StudyTime(),
       const StudyTimeStats(),
-      PlaceholderWidget(),
+      const ExamScreen(),
     ];
   }
 
