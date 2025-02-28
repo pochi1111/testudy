@@ -5,6 +5,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:testudy/configs/appTheme.dart';
 import 'package:testudy/screens/examAdd.dart';
 import 'package:testudy/services/examSchedule.dart';
+import 'package:testudy/screens/examEdit.dart';
 
 class ExamScreen extends StatefulWidget {
   const ExamScreen({Key? key}) : super(key: key);
@@ -138,6 +139,18 @@ class _ExamScreenState extends State<ExamScreen> {
                     child: ListTile(
                       title: Text(_selectedExams[index].title),
                       subtitle: Text(_selectedExams[index].description),
+                      onTap: () async {
+                        final result = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ExamEdit(exam: _selectedExams[index]),
+                          ),
+                        );
+                        if (result == true) {
+                          await _updateExams(_focusedDay);
+                          _updateSelectedExams();
+                          setState(() {});
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -153,7 +166,7 @@ class _ExamScreenState extends State<ExamScreen> {
               ),
             );
             if (result == true) {
-              _updateExams(_focusedDay);
+              await _updateExams(_focusedDay);
               _updateSelectedExams();
               setState(() {});
             }
@@ -162,7 +175,7 @@ class _ExamScreenState extends State<ExamScreen> {
         ));
   }
 
-  void _updateExams(DateTime startAt) async {
+  Future<void> _updateExams(DateTime startAt) async {
     final exams =
         await ExamAPI().getExams(startAt, startAt.add(Duration(days: 32)));
     _exams = exams;
@@ -181,6 +194,7 @@ class _ExamScreenState extends State<ExamScreen> {
     _selectedExams = _examsMap[DateTime(
             _selectedDay.year, _selectedDay.month, _selectedDay.day)] ??
         [];
+    print("selectedExams: $_selectedExams");
     setState(() {});
   }
 }

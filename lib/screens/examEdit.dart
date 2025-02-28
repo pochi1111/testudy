@@ -1,29 +1,123 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:testudy/Configs/appTheme.dart';
+import 'package:testudy/configs/appTheme.dart';
 import 'package:testudy/services/examSchedule.dart';
 
-class ExamAdd extends StatefulWidget {
-  final DateTime initialDate;  // 初期日付を追加
+class ExamEdit extends StatefulWidget {
+  final Exam exam;
 
-  const ExamAdd({
-    Key? key,
-    required this.initialDate,
-  }) : super(key: key);
+  const ExamEdit({super.key, required this.exam});
 
   @override
-  State<ExamAdd> createState() => _ExamAddState();
+  _ExamEditState createState() => _ExamEditState();
 }
 
-class _ExamAddState extends State<ExamAdd> {
+class _ExamEditState extends State<ExamEdit> {
+  late TextEditingController titleController;
+  late TextEditingController descriptionController;
   late DateTime examDate;
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    examDate = widget.initialDate;  // 初期値を渡された日付に設定
+    titleController = TextEditingController(text: widget.exam.title);
+    descriptionController = TextEditingController(text: widget.exam.description);
+    examDate = widget.exam.dateTime;
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _selectDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: examDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    );
+
+    if (picked != null && mounted) {
+      setState(() {
+        examDate = DateTime(picked.year, picked.month, picked.day);
+      });
+    }
+  }
+
+  Future<void> _updateExam() async {
+    if (titleController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('テスト名を入力してください')),
+      );
+      return;
+    }
+
+    try {
+      final updatedExam = Exam(
+        id: widget.exam.id,
+        title: titleController.text,
+        description: descriptionController.text,
+        dateTime: examDate,
+      );
+
+      await ExamAPI().updateExam(updatedExam);
+      if (mounted) {
+        Navigator.pop(context, true);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('更新に失敗しました')),
+      );
+    }
+  }
+
+  void _checkDeleteExam() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('削除の確認'),
+          content: const Text('本当に削除しますか？'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('キャンセル'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('削除'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteExam();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteExam() async {
+    try {
+      await ExamAPI().deleteExam(widget.exam.id);
+      if (mounted) {
+        Navigator.pop(context, true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('削除しました'),
+            duration: Duration(milliseconds: 1500),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('削除に失敗しました')),
+      );
+    }
   }
 
   @override
@@ -39,7 +133,7 @@ class _ExamAddState extends State<ExamAdd> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "テストを追加",
+                "テストの編集",
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -57,15 +151,13 @@ class _ExamAddState extends State<ExamAdd> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         TextButton(
-                          onPressed: () {
-                            _selectDateTime();
-                          },
+                          onPressed: _selectDate,
                           style: ButtonStyle(
                             minimumSize: MaterialStateProperty.all(Size.zero),
                             padding: MaterialStateProperty.all(EdgeInsets.zero),
                           ),
                           child: Container(
-                            width: 220, // 180から220に変更
+                            width: 220,
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
@@ -87,15 +179,6 @@ class _ExamAddState extends State<ExamAdd> {
                               ],
                             ),
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.refresh),
-                          iconSize: 30,
-                          onPressed: () {
-                            setState(() {
-                              examDate = DateTime.now();
-                            });
-                          },
                         ),
                       ],
                     ),
@@ -158,7 +241,7 @@ class _ExamAddState extends State<ExamAdd> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
-                  onPressed: _addExam,
+                  onPressed: _updateExam,
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -172,12 +255,12 @@ class _ExamAddState extends State<ExamAdd> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.add,
+                          Icons.save,
                           size: 28,
                           color: appTheme.colorScheme.onPrimary,
                         ),
                         Text(
-                          " 追加 ",
+                          " 更新 ",
                           style: TextStyle(
                             fontSize: 28,
                             color: appTheme.colorScheme.onPrimary,
@@ -192,56 +275,14 @@ class _ExamAddState extends State<ExamAdd> {
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _selectDateTime() async {
-    final DateTime? date = await showDatePicker(
-      context: context,
-      initialDate: examDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-    );
-
-    if (date != null) {
-      setState(() {
-        examDate = DateTime(date.year, date.month, date.day);
-      });
-    }
-  }
-
-  void _addExam() {
-    if (titleController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("テスト名を入力してください"),
-          duration: Duration(milliseconds: 1500),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
-          ),
-        ),
-      );
-      return;
-    }
-
-    ExamAPI().addExam(
-      Exam(
-        title: titleController.text,
-        description: descriptionController.text,
-        dateTime: examDate,
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("テストを追加しました"),
-        duration: Duration(milliseconds: 1500),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 237, 91, 91),
+        onPressed: _checkDeleteExam,
+        child: const Icon(
+          Icons.delete,
+          color: Colors.white,
         ),
       ),
     );
-    
-    Navigator.of(context).pop(true);
   }
 }
