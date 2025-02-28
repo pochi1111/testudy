@@ -230,7 +230,9 @@ class WeekTimeGraph extends StatelessWidget {
           BarChartRodData(
               toY: studyTimesInt[i].toDouble(),
               width: barWidth,
-              borderRadius: const BorderRadius.all(Radius.zero)),
+                borderRadius: const BorderRadius.all(Radius.zero),
+                color: const Color.fromARGB(255, 65, 65, 65)
+          ),
         ]);
       });
 }
