@@ -176,6 +176,7 @@ class _ExamScreenState extends State<ExamScreen> {
   }
 
   Future<void> _updateExams(DateTime startAt) async {
+    print("startAt: $startAt");
     final exams =
         await ExamAPI().getExams(startAt, startAt.add(Duration(days: 32)));
     _exams = exams;
@@ -188,6 +189,9 @@ class _ExamScreenState extends State<ExamScreen> {
       }
       _examsMap[date]!.add(exam);
     }
+    setState(() {
+      
+    });
   }
 
   void _updateSelectedExams() {
