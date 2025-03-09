@@ -22,9 +22,9 @@ class _ExamScreenState extends State<ExamScreen> {
   LinkedHashMap<DateTime, List<Exam>> _examsMap = LinkedHashMap();
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    _updateExams(DateTime(_focusedDay.year, _focusedDay.month, 1));
+    _updateExams(DateTime(_focusedDay.year, _focusedDay.month, 1),true);
     setState(() {});
   }
 
@@ -175,7 +175,7 @@ class _ExamScreenState extends State<ExamScreen> {
         ));
   }
 
-  Future<void> _updateExams(DateTime startAt) async {
+  Future<void> _updateExams(DateTime startAt, [bool isInit = false]) async {
     print("startAt: $startAt");
     final exams =
         await ExamAPI().getExams(startAt, startAt.add(Duration(days: 32)));
@@ -189,9 +189,9 @@ class _ExamScreenState extends State<ExamScreen> {
       }
       _examsMap[date]!.add(exam);
     }
-    setState(() {
-      
-    });
+    if (isInit) {
+      setState(() {});
+    }
   }
 
   void _updateSelectedExams() {
