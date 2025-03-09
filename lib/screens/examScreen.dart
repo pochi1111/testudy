@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:testudy/configs/appTheme.dart';
@@ -25,7 +26,6 @@ class _ExamScreenState extends State<ExamScreen> {
   void initState(){
     super.initState();
     _updateExams(DateTime(_focusedDay.year, _focusedDay.month, 1),true);
-    setState(() {});
   }
 
   @override
@@ -62,8 +62,10 @@ class _ExamScreenState extends State<ExamScreen> {
                       );
                     },
                   ),
-                  onPageChanged: (focusedDay) {
-                    _updateExams(focusedDay);
+                  onPageChanged: (focusedDay)async{
+                    await _updateExams(DateTime(focusedDay.year, focusedDay.month, 1));
+                    _focusedDay = focusedDay;
+                    setState(() {});
                   },
                   eventLoader: (day) {
                     day = DateTime(day.year, day.month, day.day);
@@ -146,7 +148,7 @@ class _ExamScreenState extends State<ExamScreen> {
                           ),
                         );
                         if (result == true) {
-                          await _updateExams(_focusedDay);
+                          //await _updateExams(_focusedDay);
                           _updateSelectedExams();
                           setState(() {});
                         }
