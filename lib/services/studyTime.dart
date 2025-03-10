@@ -95,7 +95,8 @@ class StudyTimeAPI {
   Future<int> getRangeStudyTime(DateTime start, DateTime end) async {
     await _initDatabase();
     List<Map<String, dynamic>> records = await _database.query('studyTime',
-        where: 'date >= ? AND date <= ?', whereArgs: [start, end]);
+      where: 'date >= ? AND date <= ?', 
+      whereArgs: [formatDateTime(start), formatDateTime(end)]);
     int totalStudyTime = 0;
     for (Map<String, dynamic> record in records) {
       totalStudyTime += record['studyTime'] as int;

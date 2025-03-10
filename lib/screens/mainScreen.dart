@@ -3,6 +3,7 @@ import 'package:testudy/screens/studyTime.dart';
 import 'package:testudy/screens/studyTimeAdd.dart';
 import 'package:testudy/screens/studyTimeStats.dart';
 import 'package:testudy/screens/examScreen.dart';
+import 'package:testudy/screens/home.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,7 +19,7 @@ class _MainScreenState extends State<MainScreen>{
   void initState(){
     super.initState();
     _children = [
-      PlaceholderWidget(),
+      const HomeScreen(),
       const StudyTime(),
       const StudyTimeStats(),
       const ExamScreen(),
@@ -60,10 +61,4 @@ class _MainScreenState extends State<MainScreen>{
       ),
     );
   }
-}
-
-Widget PlaceholderWidget(){
-  return const Center(
-    child: Text("Placeholder Widget"),
-  );
 }
