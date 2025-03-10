@@ -55,7 +55,9 @@ class _StudyTimeState extends State<StudyTime> {
                   final record = studyRecords[index];
                   return ListTile(
                     title: Text(record.subject),
-                    subtitle: Text('${record.studyTime}分'),
+                    subtitle: Text(record.studyTime >= 60 
+                      ? '${(record.studyTime / 60).floor()}時間${record.studyTime % 60}分'
+                      : '${record.studyTime}分'),
                     trailing: Text(_formatDateTime(record.date)),
                     onTap: () async {
                       final result = await Navigator.of(context).push(
