@@ -237,7 +237,7 @@ class _StudyTimeAddState extends State<StudyTimeAdd> {
                                 width: 15,
                               ),
                               Text(
-                                "${studyTimeHour}h ${studyTimeMinute}m",
+                                "$studyTimeHour時間 $studyTimeMinute分",
                                 style: const TextStyle(
                                   fontSize: 20,
                                 ),
@@ -269,7 +269,8 @@ class _StudyTimeAddState extends State<StudyTimeAdd> {
                               width: 2,
                             ),
                           ),
-                          hintText: "subject",
+                            hintText: "教科",
+                            hintStyle: const TextStyle(color: Colors.grey),
                         ),
                         style: const TextStyle(fontSize: 20),
                       ),
@@ -277,7 +278,7 @@ class _StudyTimeAddState extends State<StudyTimeAdd> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text("description", style: TextStyle(fontSize: 20)),
+                    const Text("説明", style: TextStyle(fontSize: 20)),
                     const SizedBox(
                       height: 15,
                     ),
@@ -451,7 +452,7 @@ class _StudyTimeAddState extends State<StudyTimeAdd> {
                     onChanged: (value) => setState(() => studyTimeHour = value),
                   ),
                   const Text(
-                    "h",
+                    "時間",
                     style: TextStyle(fontSize: 20),
                   ),
                   NumberPicker(
@@ -467,7 +468,7 @@ class _StudyTimeAddState extends State<StudyTimeAdd> {
                         setState(() => studyTimeMinute = value),
                   ),
                   const Text(
-                    "m",
+                    "分",
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
@@ -501,7 +502,7 @@ class _StudyTimeAddState extends State<StudyTimeAdd> {
   void addStudyTime() {
     if (studyTimeHour == 0 && studyTimeMinute == 0) {
       const snackBar = SnackBar(
-        content: Text("Please enter your study time."),
+        content: Text("勉強時間を入力してください"),
         duration: Duration(milliseconds: 1500),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
@@ -513,7 +514,7 @@ class _StudyTimeAddState extends State<StudyTimeAdd> {
     }
     if (subjectController.text.isEmpty) {
       const snackBar = SnackBar(
-        content: Text("Please enter the subject."),
+        content: Text("教科を入力してください"),
         duration: Duration(milliseconds: 1500),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(

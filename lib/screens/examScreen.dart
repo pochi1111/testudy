@@ -23,7 +23,7 @@ class _ExamScreenState extends State<ExamScreen> {
   LinkedHashMap<DateTime, List<Exam>> _examsMap = LinkedHashMap();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _updateExams(DateTime(_focusedDay.year, _focusedDay.month, 1),true);
   }
@@ -148,7 +148,7 @@ class _ExamScreenState extends State<ExamScreen> {
                           ),
                         );
                         if (result == true) {
-                          //await _updateExams(_focusedDay);
+                          await _updateExams(DateTime(_focusedDay.year, _focusedDay.month, 1));
                           _updateSelectedExams();
                           setState(() {});
                         }
@@ -168,7 +168,7 @@ class _ExamScreenState extends State<ExamScreen> {
               ),
             );
             if (result == true) {
-              await _updateExams(_focusedDay);
+                await _updateExams(DateTime(_focusedDay.year, _focusedDay.month, 1));
               _updateSelectedExams();
               setState(() {});
             }
@@ -193,6 +193,7 @@ class _ExamScreenState extends State<ExamScreen> {
     }
     if (isInit) {
       setState(() {});
+      _updateSelectedExams();
     }
   }
 

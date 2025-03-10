@@ -251,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ],
                           ),
-                          const Text('差分', style: TextStyle(color: Colors.grey)),
+                          const Text('週平均との差', style: TextStyle(color: Colors.grey)),
                         ],
                       ),
                     ],

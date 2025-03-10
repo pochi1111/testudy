@@ -45,35 +45,107 @@ class _StudyTimeState extends State<StudyTime> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: studyRecords.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: _loadStudyRecords,
-              child: ListView.builder(
-                itemCount: studyRecords.length,
-                itemBuilder: (context, index) {
-                  final record = studyRecords[index];
-                  return ListTile(
-                    title: Text(record.subject),
-                    subtitle: Text(record.studyTime >= 60 
-                      ? '${(record.studyTime / 60).floor()}時間${record.studyTime % 60}分'
-                      : '${record.studyTime}分'),
-                    trailing: Text(_formatDateTime(record.date)),
-                    onTap: () async {
-                      final result = await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              StudyTimeEdit(record: record),
-                        ),
-                      );
-                      if (result == true) {
-                        _loadStudyRecords();
-                      }
-                    },
-                  );
-                },
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 20), // 上部にパディングを追加
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 16.0),
+            child: const Text(
+              '勉強時間一覧',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
+          ),
+          Expanded(
+            child: studyRecords.isEmpty
+              ? const Center(
+                  child: Text('表示可能なデータがありません',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
+                  ),
+                )
+              : RefreshIndicator(
+                  onRefresh: _loadStudyRecords,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: studyRecords.length,
+                    itemBuilder: (context, index) {
+                      final record = studyRecords[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Card(
+                          elevation: 2,
+                          child: InkWell(
+                            onTap: () async {
+                              final result = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => StudyTimeEdit(record: record),
+                                ),
+                              );
+                              if (result == true) {
+                                _loadStudyRecords();
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        record.subject,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        _formatDateTime(record.date),
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    record.studyTime >= 60 
+                                      ? '${(record.studyTime / 60).floor()}時間${record.studyTime % 60}分'
+                                      : '${record.studyTime}分',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  if (record.description.isNotEmpty) ...[
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      record.description,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final result = await Navigator.of(context).push(

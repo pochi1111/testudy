@@ -50,7 +50,13 @@ class _ExamEditState extends State<ExamEdit> {
   Future<void> _updateExam() async {
     if (titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('テスト名を入力してください')),
+        const SnackBar(
+          content: Text('テスト名を入力してください'),
+          duration: Duration(milliseconds: 1500),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
+          ),
+        ),
       );
       return;
     }
@@ -66,15 +72,43 @@ class _ExamEditState extends State<ExamEdit> {
       await ExamAPI().updateExam(updatedExam);
       if (mounted) {
         Navigator.pop(context, true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('更新しました'),
+            duration: Duration(milliseconds: 1500),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
+            ),
+          ),
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('更新に失敗しました')),
+        const SnackBar(
+          content: Text('更新に失敗しました'),
+          duration: Duration(milliseconds: 1500),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
+          ),
+        ),
       );
     }
   }
 
   void _checkDeleteExam() {
+    if (titleController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('テスト名を入力してください'),
+          duration: Duration(milliseconds: 1500),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
+          ),
+        ),
+      );
+      return;
+    }
+
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -110,12 +144,21 @@ class _ExamEditState extends State<ExamEdit> {
           const SnackBar(
             content: Text('削除しました'),
             duration: Duration(milliseconds: 1500),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
+            ),
           ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('削除に失敗しました')),
+        const SnackBar(
+          content: Text('削除に失敗しました'),
+          duration: Duration(milliseconds: 1500),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
+          ),
+        ),
       );
     }
   }

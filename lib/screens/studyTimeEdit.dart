@@ -73,7 +73,7 @@ class _StudyTimeEditState extends State<StudyTimeEdit> {
                         setState(() => _studyTimeHour = value),
                   ),
                   const Text(
-                    "h",
+                    "時間",  // "h" から "時間" に変更
                     style: TextStyle(fontSize: 20),
                   ),
                   NumberPicker(
@@ -89,7 +89,7 @@ class _StudyTimeEditState extends State<StudyTimeEdit> {
                         setState(() => _studyTimeMinute = value),
                   ),
                   const Text(
-                    "m",
+                    "分",  // "m" から "分" に変更
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
@@ -121,6 +121,36 @@ class _StudyTimeEditState extends State<StudyTimeEdit> {
   }
 
   Future<void> _updateRecord() async {
+    if (_studyTimeHour == 0 && _studyTimeMinute == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("勉強時間を入力してください"),
+          duration: Duration(milliseconds: 1500),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(5),
+            ),
+          ),
+        ),
+      );
+      return;
+    }
+    
+    if (_subjectController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("教科を入力してください"),
+          duration: Duration(milliseconds: 1500),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(5),
+            ),
+          ),
+        ),
+      );
+      return;
+    }
+
     try {
       final updatedRecord = StudyTimeRecord(
         id: widget.record.id,
@@ -133,6 +163,17 @@ class _StudyTimeEditState extends State<StudyTimeEdit> {
       await StudyTimeAPI().updateStudyTimeRecord(updatedRecord);
       if (mounted) {
         Navigator.pop(context, true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('更新しました'),
+            duration: Duration(milliseconds: 1500),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(5),
+              ),
+            ),
+          ),
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -365,7 +406,7 @@ class _StudyTimeEditState extends State<StudyTimeEdit> {
                             const Icon(Icons.timer, size: 25),
                             const SizedBox(width: 15),
                             Text(
-                              "${_studyTimeHour}h ${_studyTimeMinute}m",
+                              "${_studyTimeHour}時間 ${_studyTimeMinute}分",  // "h m" から "時間 分" に変更
                               style: const TextStyle(fontSize: 20),
                             ),
                           ],
@@ -393,13 +434,14 @@ class _StudyTimeEditState extends State<StudyTimeEdit> {
                               width: 2,
                             ),
                           ),
-                          hintText: "subject",
+                          hintText: "教科",
+                          hintStyle: const TextStyle(color: Colors.grey),
                         ),
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text("description", style: TextStyle(fontSize: 20)),
+                    const Text("説明", style: TextStyle(fontSize: 20)),
                     const SizedBox(height: 15),
                     SizedBox(
                       width: 300,
