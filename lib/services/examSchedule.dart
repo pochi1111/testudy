@@ -114,4 +114,40 @@ class ExamAPI {
       );
     }).toList();
   }
+
+  Future<List<Exam>> getAfterExams(int amount) async {
+    await _initDatabase();
+    late List<Map<String, dynamic>> exams;
+    exams = await _database.query(
+      'exam',
+      where: 'dateTime >= ?',
+      whereArgs: [formatDateTime(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day))],
+      orderBy: 'dateTime ASC',
+      limit: amount
+    );
+    return exams.map((exam) {
+      return Exam(
+        id: exam['id'],
+        title: exam['title'],
+        description: exam['description'] ?? '',
+        dateTime: parseDateTime(exam['dateTime']),
+      );
+    }).toList();
+  }
+
+  Future<Exam> getExamData(int id) async {
+    await _initDatabase();
+    late List<Map<String, dynamic>> exams;
+    exams = await _database.query('exam', where: 'id = ?', whereArgs: [id]);
+    return Exam(
+      id: exams[0]['id'],
+      title: exams[0]['title'],
+      description: exams[0]['description'] ?? '',
+      dateTime: parseDateTime(exams[0]['dateTime']),
+    );
+  }
+
+  Future<void> close() async {
+    await _database.close();
+  }
 }
