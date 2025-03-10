@@ -44,3 +44,7 @@ app.*.map.json
 
 #font
 assets
+
+#secrets
+*.jks
+keystore.properties
